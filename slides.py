@@ -321,9 +321,16 @@ class HTMLTranslator(html_baseclass):
                 if isinstance(val, bool):
                     val = repr(val).lower()
                 elif isinstance(val, basestring):
-                    val = repr(val)
-                    if val.startswith('u'):
-                        val = val[1:]
+                    try:
+                        v = float(val)
+                    except ValueError:
+                        val = repr(val)
+                        if val.startswith('u'):
+                            val = val[1:]
+                    else:
+                        v = int(val)
+                        if v == val:
+                            val = v
                 reveal['reveal_init'] += '        {}: {},\n'.format(opt, val)
         self.body_suffix.insert(0, '</div>\n</div>\n' +
                                 self.reveal_ending_scripts % reveal)

@@ -162,12 +162,12 @@ class VideoDirective(Directive):
     optional_arguments = 0
     final_argument_whitespace = True
     option_spec = {
-        'align': lambda a: directives.choice(a, ('center', 'left', 'right')),
+        'align': choice_validator(['center', 'left', 'right']),
         'width': directives.unchanged_required,
         # 'height': directives.unchanged,
         'autoplay': directives.flag,
         'loop': directives.flag,
-        'controls': directives.unchanged}
+        'controls': validate_boolean}
 
     def run(self):
         href = directives.uri(self.arguments[0])
@@ -175,12 +175,15 @@ class VideoDirective(Directive):
         if codec not in ['mp4', 'webm', 'ogg', 'ogv']:
             self.error("Error in directive: the video must be in .mp4, .webm, "
                        ".ogg, or .ogv format.")
-        args = dict(self.options, href=href, codec=codec)
-        args['width'] = args.get('width', '50%').strip()
-        ctrls = args.get('controls', 'yes').strip().lower()
-        args['controls'] = '' if ctrls in ['n', 'no', 'false'] else 'controls'
-        args['loop'] = '' if not args.get('loop') else 'loop'
-        args['autoplay'] = '' if not args.get('autoplay') else 'autoplay'
+        args = dict(align='center', width='50%', controls='controls',
+                    autoplay='', loop='', href=href, codec=codec)
+        opts = self.options
+        for opt, value in opts.items():
+            if opt in ('controls', 'loop', 'autoplay'):
+                opts[opt] = '' if value or value is None else opt
+            else:
+                opts[opt] = value.strip()
+        args.update(opts)
         return [nodes.raw('video', VIDEO_TAG % args, format='html')]
 
 
@@ -283,11 +286,11 @@ class RevealDirective(Directive):
         'parallaxBackgroundHorizontal': directives.unchanged_required,
         'parallaxBackgroundVertical': directives.unchanged_required,
         'display': directives.unchanged_required,  # 'block'
-        'width': directives.unchanged_required,  # '960'
-        'height': directives.unchanged_required,  # '700'
-        'margin': directives.unchanged_required,  # '0.1'
-        'minScale': directives.unchanged_required,  # '0.2'
-        'maxScale': directives.unchanged_required,  # '1.5'
+        'width': directives.unchanged_required,  # 960
+        'height': directives.unchanged_required,  # 700
+        'margin': directives.unchanged_required,  # 0.1
+        'minScale': directives.unchanged_required,  # 0.2
+        'maxScale': directives.unchanged_required,  # 1.5
         # following pair added for math.js plugin initialization
         'mathjax': directives.uri,
         'mathjaxConfig': directives.unchanged_required,
