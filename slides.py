@@ -196,8 +196,11 @@ class HTMLTranslator(html_baseclass):
 
 <link rel="stylesheet" href="%(reveal_dir)s/css/reveal.css">
 <style>
-  .reveal .slides {text-align: left;}
-  .reveal h1, .reveal h2, .reveal .subtitle {text-align: center;}
+  .reveal .slides {text-align:left;}
+  .reveal h1, .reveal h2, .reveal .subtitle {text-align:center;}
+  .reveal .align-center {display:block, margin-left:auto; margin-right:auto;}
+  .reveal .align-left {float:left;}
+  .reveal .align-right {float:right;}
 </style>
 <link rel="stylesheet" href="%(reveal_dir)s/css/theme/%(theme)s.css" id="theme">
 
@@ -297,11 +300,12 @@ class HTMLTranslator(html_baseclass):
             if local_mathjax:
                 local_mathjax.sort()
                 local_mathjax = local_mathjax[-1]
-                mathjax['mathjax'] = local_mathjax
+                mathjax['mathjax'] = os.path.join(local_mathjax,
+                                                  'MathJax.js')
                 local_mathjax = False  # already exists, no need to download
             elif (not mathjax['mathjax'].startswith('http') and
-                      not os.path.exists(mathjax['mathjax'])):
-                path = mathjax['mathjax'].rsplit('-', 1)
+                  not os.path.exists(mathjax['mathjax'])):
+                path = os.path.dirname(mathjax['mathjax']).rsplit('-', 1)
                 if len(path) < 2 or not path[0].endswith('MathJax'):
                     print("WARNING: No such path as {}"
                           "".format(mathjax['mathjax']))
@@ -315,23 +319,21 @@ class HTMLTranslator(html_baseclass):
             reveal['reveal_math_dep'] = reveal['reveal_math'] = ''
             local_mathjax = None
         reveal['reveal_init'] = ''
-        if hasattr(node, 'reveal'):
-            # The reveal:: directive is present.
-            for opt, val in node.reveal.items():
-                if isinstance(val, bool):
-                    val = repr(val).lower()
-                elif isinstance(val, basestring):
-                    try:
-                        v = float(val)
-                    except ValueError:
-                        val = repr(val)
-                        if val.startswith('u'):
-                            val = val[1:]
-                    else:
-                        v = int(val)
-                        if v == val:
-                            val = v
-                reveal['reveal_init'] += '        {}: {},\n'.format(opt, val)
+        for opt, val in getattr(node, 'reveal', {}).items():
+            if isinstance(val, bool):
+                val = repr(val).lower()
+            elif isinstance(val, basestring):
+                try:
+                    v = float(val)
+                except ValueError:
+                    val = repr(val)
+                    if val.startswith('u'):
+                        val = val[1:]
+                else:
+                    val = int(v)
+                    if v != val:
+                        val = v
+            reveal['reveal_init'] += '        {}: {},\n'.format(opt, val)
         self.body_suffix.insert(0, '</div>\n</div>\n' +
                                 self.reveal_ending_scripts % reveal)
         self.fragment.extend(self.body)  # self.fragment is the "naked" body
