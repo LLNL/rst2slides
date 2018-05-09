@@ -91,7 +91,7 @@ def copy_hljs_styles(dest):
 
 
 hljs_styles = {
-    # ########################################### Styles with light background
+    ############################################ Styles with light background
 
     'github': """/*
 
@@ -278,9 +278,9 @@ Orginal Style from ethanschoonover.com/solarized (c) Jeremy Hull <sourdrums@gmai
 .reveal .hljs-strong {
   font-weight: bold;
 }
-""",  # noqa
+""",
 
-    'atom-one-light': """/*
+    'atom-one-light':"""/*
 
 Atom One Light by Daniel Gamage
 Original One Light Syntax theme from https://github.com/atom/one-light-syntax
@@ -479,7 +479,7 @@ Original highlight.js style (c) Ivan Sagalaev <maniac@softwaremaniacs.org>
 }
 """,
 
-    # ########################################### Styles with dark background
+    ################################################ Styles with dark background
 
     'obsidian': """/**
  * Obsidian style
@@ -737,7 +737,7 @@ Orginal Style from ethanschoonover.com/solarized (c) Jeremy Hull <sourdrums@gmai
 .reveal .hljs-strong {
   font-weight: bold;
 }
-""",  # noqa
+""",
 
     'atom-one-dark': """/*
 

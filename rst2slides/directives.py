@@ -6,13 +6,30 @@ from docutils.parsers.rst import Directive, directives
 from docutils.transforms import Transform
 from docutils.parsers.rst.directives.body import CodeBlock
 
+# reveal.js section attributes:
+#   id="Section title"
+#   data-markdown
+#   data-background-color="#rrggbb"  or  rgba()  or  hsl()
+#   data-background-image="URL"
+#     data-background-repeat="no-repeat", data-background-size="cover"
+#     data-background-position='center'
+#   data-transition="slide"
+#     data-transition-speed="default"   default/fast/slow
+#   data-state="myclass"  adds myclass to section element when open
+#   data-state="customevent"  fires javascript listener for 'customevent'
+#   data-notes="instead of aside"
+#   data-timing=120   for speaker clock
+#
 # reveal.js tag classes:
 #   fragment  -plus options- grow shrink fade-out fade-up current-visible
 #   highlight-red highlight-blue highlight-green
 #
 # reveal.js queries:
 #   ?transition=xxx#/transitions  (none, fade, slide, convex, concave, zoom)#
-
+#
+# highlight.js wants <code class="hljs <language>">
+#   add data-trim attribute to remove surrounding whitespace
+#
 # Reveal.configure({
 #   keyboard: {
 #     13: 'next', // go to the next slide when the ENTER key is pressed
@@ -21,6 +38,85 @@ from docutils.parsers.rst.directives.body import CodeBlock
 #           (i.e. disable a reveal.js default binding)
 #   }
 # });
+#
+#   Reveal.initialize options (or Reveal.configure after initialization):
+# controls: true    control arrows visible
+# controlsTutorial: true   arrows bounce on first encounter
+# controlsLayout: 'bottom-right'   or 'edges'
+# controlsBackArrows: 'faded'   or 'hidden' or 'visible'
+# progress: bool    progress bar
+# defaultTiming: 120   two minutes per slide
+# slideNumber: false   display page number
+# history: false   push slide changes to browser history
+# keyboard: true   enable keyboard navigation shortcuts
+# overview: true   enable slide overview mode
+# center: true   vertically center slides
+# touch: true   enable touch navigation
+# loop: false   loop the presentation
+# rtl: false   right-to-left presentation direction
+# shuffle: false    randomize slide order each time presentation loads
+# fragments: true    global fragments switch
+# embedded: false    whether presentaion running o nlimited part of screen
+# help: true    pressing ? shows help overlay
+# showNotes: false   whether speaker notes shown to all viewers
+# autoPlayMedia: null   only if data-autoplay present, bool to override
+# autoSlide: 0   milliseconds (0 disables), data-autoslide for per slide
+# autoSlideStoppable: true
+# autoSlideMethod: Reveal.navigateNext
+# mouseWheel: false   enable mouse wheel navigation
+# hideAddressBar: true   hide address bar on mobile devices
+# previewLinks: false   preview links in overlay, or data-preview-link per link
+# transition: 'slide'   none/fade/slide/convex/concave/zoom
+# transitionSpeed: 'default'   default/fast/slow
+# backgroundTransition: 'fade'    none/fade/slide/convex/concave/zoom
+# viewDistance: 3   number of slides away from current that are visible
+# parallaxBackGroundImage: ''   URL
+# parallaxBackgroundSize: ''    CSS syntax like "2100px 900px"
+# parallaxBackgroundHorizontal: null   (and Vertical) in pixels, 0 disables
+# display: 'block'   display mode used to show slides
+#
+#   Size options for Reveal.initialize only?
+# width: 960
+# height: 700
+# margin: 0.1
+# minScale: 0.2
+# maxScale: 1.5
+#   Use width=height=100%, margin=0, minScale=maxScale=1 to disable
+#
+# math: { mathjax: URL, config: 'TeX-AMS_HTML-full' }
+#
+#   dependencies require head.js to be loaded before reveal.js!
+# dependencies: [
+# 		// Cross-browser shim that fully implements classList
+#       // - https://github.com/eligrey/classList.js/
+# 		{ src: 'lib/js/classList.js', condition: function()
+#              { return !document.body.classList; } },
+#
+# 		// Interpret Markdown in <section> elements
+# 		{ src: 'plugin/markdown/marked.js', condition: function()
+#              { return !!document.querySelector( '[data-markdown]' ); } },
+# 		{ src: 'plugin/markdown/markdown.js', condition: function()
+#              { return !!document.querySelector( '[data-markdown]' ); } },
+#
+# 		// Syntax highlight for <code> elements
+# 		{ src: 'plugin/highlight/highlight.js', async: true, callback:
+#              function() { hljs.initHighlightingOnLoad(); } },
+#
+# 		// Zoom in and out with Alt+click
+# 		{ src: 'plugin/zoom-js/zoom.js', async: true },
+#
+# 		// Speaker notes
+# 		{ src: 'plugin/notes/notes.js', async: true },
+#
+# 		// MathJax
+# 		{ src: 'plugin/math/math.js', async: true }
+# ]
+#
+# multiplex: --> audience clients controlled by presenter master presentation
+#
+# Speaker notes use <aside class="notes">...</aside>
+#    --> need aside directive
+#    short notes with data-notes section attribute
 
 
 def choice_validator(values):
@@ -91,12 +187,14 @@ class VideoDirective(Directive):
         return [nodes.raw('video', VIDEO_TAG % args, format='html')]
 
 
+# Is the outer div really necessary?  Why not add class to video tag?
+# Also, should style attribute in video be in css instead?
 VIDEO_TAG = """\
 <video class="align-%(align)s" width="%(width)s" %(autoplay)s %(loop)s %(controls)s>
     <source src="%(href)s" type="video/%(codec)s">
     Your browser does not support the video tag.
 </video>
-"""  # noqa
+"""
 
 
 class ConfigureDirective(Directive):
@@ -198,6 +296,7 @@ class RevealDirective(Directive):
         'highlightstyle': directives.unchanged_required,
         'revealpath': directives.unchanged_required
         }
+    # Docutils field list options froced to lower case.  Put them back.
     camel_case = {
         'controlstutorial': 'controlsTutorial',
         'controlslayout': 'controlsLayout',
@@ -220,13 +319,13 @@ class RevealDirective(Directive):
         'parallaxbackgroundhorizontal': 'parallaxBackgroundHorizontal',
         'parallaxbackgroundvertical': 'parallaxBackgroundVertical',
         'minscale': 'minScale',
-        'maxscale': 'maxScale',
+        'maxscale':'maxScale'
         }
 
     def run(self):
         document = self.state_machine.document
-        opts = self.options  # docutils has lowercased these, so put back
-        opts = {self.camel_case.get(opt, opt): value for opt, value in opts}
+        opts = {self.camel_case.get(opt, opt): value
+                for opt, value in self.options.items()}
         document.reveal = opts
         document.mathjax = mathjax_default.copy()
         document.reveal_dir = path = opts.pop('revealpath', REVEAL_DIR)
@@ -503,7 +602,7 @@ class HLjsCodeBlock(CodeBlock):
                    'name': directives.unchanged,
                    'noescape': directives.flag,
                    'trim': directives.flag
-                   }
+                  }
     has_content = True
 
     def run(self):
