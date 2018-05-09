@@ -28,6 +28,9 @@ be downloaded to path/MathJax-master/ or to path/MathJax-tag if the mathjax
 tag is specified.
 
 """
+# Copyright (c) 2018, Lawrence Livermore National Security, LLC
+# All rights reserved.
+# This code is released under a BSD license, see LICENSE.txt for details.
 
 import os
 import os.path

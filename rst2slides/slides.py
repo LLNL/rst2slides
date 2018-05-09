@@ -127,6 +127,10 @@ Layout of your presentation repo::
             ...
 
 """
+# Copyright (c) 2018, Lawrence Livermore National Security, LLC
+# All rights reserved.
+# This code is released under a BSD license, see LICENSE.txt for details.
+
 import sys
 import os.path
 from glob import glob
