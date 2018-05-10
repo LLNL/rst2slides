@@ -1,4 +1,7 @@
 #!/usr/bin/env python
+# Copyright (c) 2018, Lawrence Livermore National Security, LLC
+# All rights reserved.
+# This code is released under a BSD license, see LICENSE.txt for details.
 """A docutils writer to convert rst files to reveal-js.
 
 Based on public domain or open source code by Ezio Melotti, Julien Vitay,
@@ -127,9 +130,6 @@ Layout of your presentation repo::
             ...
 
 """
-# Copyright (c) 2018, Lawrence Livermore National Security, LLC
-# All rights reserved.
-# This code is released under a BSD license, see LICENSE.txt for details.
 
 import sys
 import os.path
