@@ -1,15 +1,14 @@
 #!/usr/bin/env python
 # Copyright (c) 2018, Lawrence Livermore National Security, LLC
 # All rights reserved.
-# This code is released under a BSD license, see LICENSE.txt for details.
+# This code is released under an MIT license, see LICENSE.txt for details.
 """A docutils writer to convert rst files to reveal-js.
 
 Based on public domain or open source code by Ezio Melotti, Julien Vitay,
-Martin Gaitan, and the rst2s5 HTML writer from docutils:
+and the rst2s5 HTML writer from docutils:
 
 * http://bitbucket.org/ezio_melotti/rst2reveal
 * http://bitbucket.org/vitay/rst2reveal (or http://github.com/vitay/rst2reveal)
-* http://github.com/mgaitan/charla__doc__
 * git://repo.or.cz/docutils.git
 
 Presentation rst begins like this:

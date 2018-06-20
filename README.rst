@@ -9,7 +9,6 @@ ideas thrown into the mix.  Sources:
 * http://bitbucket.org/ezio_melotti/rst2reveal by Ezio Melotti
 * http://bitbucket.org/vitay/rst2reveal (or http://github.com/vitay/rst2reveal)
   by Julien Vitay
-* http://github.com/mgaitan/charla__doc__ by Martin Gaitan
 
 In a nutshell, each major section of your rst document becomes one
 slide.  Top level subsections within each section become sub-slides.
