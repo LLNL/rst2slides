@@ -1,8 +1,14 @@
 #!/usr/bin/env python
 # Copyright (c) 2018, Lawrence Livermore National Security, LLC.
 # Produced at the Lawrence Livermore National Laboratory
+# Written by David H. Munro <munro1@llnl.gov>. CODE-754812.
 # All rights reserved.
+#
+# This file is part of rst2slides.
+# For details, see https://github.com/llnl/rst2slides.
+#
 # This code is released under an MIT license, see LICENSE.txt for details.
+
 """Download reveal.js and optionally MathJax.
 
 Also supply four light and four dark highlight.js styles, which have been
@@ -95,7 +101,7 @@ def copy_hljs_styles(dest):
 
 
 hljs_styles = {
-    ############################################ Styles with light background
+    # ------------------------------------------ Styles with light background
 
     'github': """/*
 
@@ -282,9 +288,9 @@ Orginal Style from ethanschoonover.com/solarized (c) Jeremy Hull <sourdrums@gmai
 .reveal .hljs-strong {
   font-weight: bold;
 }
-""",
+""",  # noqa
 
-    'atom-one-light':"""/*
+    'atom-one-light': """/*
 
 Atom One Light by Daniel Gamage
 Original One Light Syntax theme from https://github.com/atom/one-light-syntax
@@ -483,7 +489,7 @@ Original highlight.js style (c) Ivan Sagalaev <maniac@softwaremaniacs.org>
 }
 """,
 
-    ################################################ Styles with dark background
+    # ------------------------------------------ Styles with dark background
 
     'obsidian': """/**
  * Obsidian style
@@ -741,7 +747,7 @@ Orginal Style from ethanschoonover.com/solarized (c) Jeremy Hull <sourdrums@gmai
 .reveal .hljs-strong {
   font-weight: bold;
 }
-""",
+""",  # noqa
 
     'atom-one-dark': """/*
 

@@ -1,7 +1,14 @@
 #!/usr/bin/env python
-# Copyright (c) 2018, Lawrence Livermore National Security, LLC
+# Copyright (c) 2018, Lawrence Livermore National Security, LLC.
+# Produced at the Lawrence Livermore National Laboratory
+# Written by David H. Munro <munro1@llnl.gov>. CODE-754812.
 # All rights reserved.
+#
+# This file is part of rst2slides.
+# For details, see https://github.com/llnl/rst2slides.
+#
 # This code is released under an MIT license, see LICENSE.txt for details.
+
 """A docutils writer to convert rst files to reveal-js.
 
 Based on public domain or open source code by Ezio Melotti, Julien Vitay,
@@ -306,7 +313,7 @@ class HTMLTranslator(html_baseclass):
                 mathjax['mathjax'] = os.path.join(local_mathjax, 'MathJax.js')
                 local_mathjax = False  # already exists, no need to download
             elif (not mathjax['mathjax'].startswith('http') and
-                      not os.path.exists(mathjax['mathjax'])):
+                  not os.path.exists(mathjax['mathjax'])):
                 path = mathjax['mathjax'].rsplit('-', 1)
                 if len(path) < 2 or not path[0].endswith('MathJax'):
                     print("WARNING: No such path as {}"
@@ -341,9 +348,9 @@ class HTMLTranslator(html_baseclass):
         self.body_suffix.insert(0, '</div>\n</div>\n' +
                                 self.reveal_ending_scripts % reveal)
         self.fragment.extend(self.body)  # self.fragment is the "naked" body
-        self.html_body.extend(self.body_prefix[1:] + self.body_pre_docinfo
-                              + self.docinfo + self.body
-                              + self.body_suffix[:-1])
+        self.html_body.extend(self.body_prefix[1:] + self.body_pre_docinfo +
+                              self.docinfo + self.body +
+                              self.body_suffix[:-1])
         assert not self.context, 'len(context) = %s' % len(self.context)
         # Download local copy of reveal.js and optionally MathJax.
         setup(self.reveal_dir, local_mathjax)

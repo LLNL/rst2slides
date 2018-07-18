@@ -1,6 +1,11 @@
 # Copyright (c) 2018, Lawrence Livermore National Security, LLC.
 # Produced at the Lawrence Livermore National Laboratory
+# Written by David H. Munro <munro1@llnl.gov>. CODE-754812.
 # All rights reserved.
+#
+# This file is part of rst2slides.
+# For details, see https://github.com/llnl/rst2slides.
+#
 # This code is released under an MIT license, see LICENSE.txt for details.
 
 import os.path
@@ -199,7 +204,7 @@ VIDEO_TAG = """\
     <source src="%(href)s" type="video/%(codec)s">
     Your browser does not support the video tag.
 </video>
-"""
+"""  # noqa
 
 
 class ConfigureDirective(Directive):
@@ -324,7 +329,7 @@ class RevealDirective(Directive):
         'parallaxbackgroundhorizontal': 'parallaxBackgroundHorizontal',
         'parallaxbackgroundvertical': 'parallaxBackgroundVertical',
         'minscale': 'minScale',
-        'maxscale':'maxScale'
+        'maxscale': 'maxScale'
         }
 
     def run(self):
@@ -606,8 +611,7 @@ class HLjsCodeBlock(CodeBlock):
     option_spec = {'class': directives.class_option,
                    'name': directives.unchanged,
                    'noescape': directives.flag,
-                   'trim': directives.flag
-                  }
+                   'trim': directives.flag}
     has_content = True
 
     def run(self):
